@@ -1,7 +1,7 @@
 const MAX_MOVES = 7;
 
 function dribble(pockets, hand, index, points) {
-  if (!hand) {
+  if (hand < 1) {
     if ((index === 12 || index < 6) && pockets[index - 1] === 1) {
       const opposite = index === 12 ? 11 : [11, 10, 9, 8, 7, 6][index - 1];
       let newPockets = [...pockets];
@@ -27,16 +27,17 @@ function dribble(pockets, hand, index, points) {
 }
 
 function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
-  const cf = choice === false ? index : choice;
   if (depth === MAX_MOVES) {
-    choices[cf].ends++;
-    // if (tot.al === (hopefully this is a constant)) {
-    // resolve(choices);
-    // }
+    // TODO: this (choices[choice].ends++) is in the wrong place, or needs to go in additional places
+    choices[choice].ends++;
+    if (tot.al >= 55986) {
+      resolve(choices);
+    }
     return;
   }
   tot.al++;
   choices.forEach((_, index) => {
+    const cf = choice === false ? index : choice;
     if (pockets[index]) {
       const result = dribble(
         pockets,
@@ -45,11 +46,11 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
         0
       );
       if (!flipped) {
-        choices[cf] += result.points;
+        choices[cf].points += result.points;
       }
       setTimeout(() => {
         recurse({
-          choice: choice === false ? index : choice,
+          choice: cf,
           choices,
           depth: depth + 1,
           flipped: result.freeTurn ? flipped : !flipped,
@@ -61,7 +62,6 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
     } else {
       tot.al += Math.pow(6, MAX_MOVES - depth);
     }
-    console.log(tot.al);
   });
 }
 
