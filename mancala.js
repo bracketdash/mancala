@@ -26,9 +26,10 @@ function dribble(pockets, hand, index, points) {
   return dribble(newPockets, hand - 1, index + 1, points);
 }
 
-function recurse({ choices, depth, flipped, pockets, resolve }) {
+function recurse({ choice, choices, depth, flipped, pockets, resolve }) {
+  const cf = choice === false ? index : choice;
   if (depth === MAX_MOVES) {
-    // TODO: choices[original choice index].ends++;
+    choices[cf].ends++;
     // TODO: when all processing is done, resolve(choices);
     return;
   }
@@ -41,10 +42,11 @@ function recurse({ choices, depth, flipped, pockets, resolve }) {
         0
       );
       if (!flipped) {
-        // TODO: choices[original choice index] += result.points;
+        choices[cf] += result.points;
       }
       setTimeout(() => {
         recurse({
+          choice: choice === false ? index : choice,
           choices,
           depth: depth + 1,
           flipped: result.freeTurn ? flipped : !flipped,
@@ -60,6 +62,7 @@ function init() {
   const getArray = (length, fill) => new Array(length).fill(fill);
   return new Promise((resolve) => {
     recurse({
+      choice: false,
       choices: getArray(6, 0).map(() => ({ ends: 0, points: 0 })),
       depth: 0,
       flipped: false,
