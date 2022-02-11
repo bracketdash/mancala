@@ -26,13 +26,16 @@ function dribble(pockets, hand, index, points) {
   return dribble(newPockets, hand - 1, index + 1, points);
 }
 
-function recurse({ choice, choices, depth, flipped, pockets, resolve }) {
+function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
   const cf = choice === false ? index : choice;
   if (depth === MAX_MOVES) {
     choices[cf].ends++;
-    // TODO: when all processing is done, resolve(choices);
+    // if (tot.al === (hopefully this is a constant)) {
+    // resolve(choices);
+    // }
     return;
   }
+  tot.al++;
   choices.forEach((_, index) => {
     if (pockets[index]) {
       const result = dribble(
@@ -52,9 +55,13 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve }) {
           flipped: result.freeTurn ? flipped : !flipped,
           pockets: result.pockets,
           resolve,
+          tot,
         });
       });
+    } else {
+      tot.al += Math.pow(6, MAX_MOVES - depth);
     }
+    console.log(tot.al);
   });
 }
 
@@ -69,6 +76,7 @@ function init() {
       // TODO: allow user to input starting state
       pockets: getArray(12, 4),
       resolve,
+      tot: { al: 0 },
     });
   }).then((result) => {
     console.log(result);
