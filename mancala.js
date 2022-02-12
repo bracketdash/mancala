@@ -3,12 +3,12 @@ const MAX_MOVES = 7;
 function dribble(pockets, hand, index, points) {
   if (hand < 1) {
     if ((index === 12 || index < 6) && pockets[index - 1] === 1) {
+      const newPockets = [...pockets];
       const opposite = index === 12 ? 11 : [11, 10, 9, 8, 7, 6][index - 1];
-      let newPockets = [...pockets];
       points += newPockets[opposite] + 1;
       newPockets[index - 1] = 0;
       newPockets[opposite] = 0;
-      return { newPockets, points };
+      return { pockets: newPockets, points };
     }
     return { pockets, points };
   }
@@ -30,8 +30,8 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
   tot.al++;
   if (depth === MAX_MOVES) {
     choices[choice].ends++;
-    console.log(tot.al);
-    if (tot.al >= 55986) {
+    // console.log(tot.al);
+    if (tot.al >= 1306658) {
       setTimeout(() => {
         resolve(choices);
       }, 100);
@@ -63,8 +63,8 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
     } else {
       choices[cf].ends++;
       tot.al += Math.pow(6, MAX_MOVES - depth);
-      console.log(tot.al);
-      if (tot.al >= 55986) {
+      // console.log(tot.al);
+      if (tot.al >= 1306658) {
         resolve(choices);
       }
     }
