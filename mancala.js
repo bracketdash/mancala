@@ -60,6 +60,7 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
         });
       });
     } else {
+      choices[choice].ends++;
       tot.al += Math.pow(6, MAX_MOVES - depth);
     }
   });
