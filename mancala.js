@@ -95,4 +95,4 @@ function getBestMoves(pockets) {
   });
 }
 
-getBestMoves(new Array(12).fill(4));
+getBestMoves([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
