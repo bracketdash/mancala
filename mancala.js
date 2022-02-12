@@ -1,5 +1,7 @@
 const MAX_MOVES = 7;
 
+const getArray = (length, fill) => new Array(length).fill(fill);
+
 function dribble(pockets, hand, index, points) {
   if (hand < 1) {
     if ((index === 12 || index < 6) && pockets[index - 1] === 1) {
@@ -30,7 +32,6 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
   tot.al++;
   if (depth === MAX_MOVES) {
     choices[choice].ends++;
-    // console.log(tot.al);
     if (tot.al >= 1306658) {
       setTimeout(() => {
         resolve(choices);
@@ -63,7 +64,6 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
     } else {
       choices[cf].ends++;
       tot.al += Math.pow(6, MAX_MOVES - depth);
-      // console.log(tot.al);
       if (tot.al >= 1306658) {
         resolve(choices);
       }
@@ -71,22 +71,28 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
   });
 }
 
-function init() {
-  const getArray = (length, fill) => new Array(length).fill(fill);
+function getBestMoves(pockets) {
   return new Promise((resolve) => {
     recurse({
       choice: false,
       choices: getArray(6, 0).map(() => ({ ends: 0, points: 0 })),
       depth: 0,
       flipped: false,
-      // TODO: allow user to input starting state
-      pockets: getArray(12, 4),
+      pockets,
       resolve,
       tot: { al: 0 },
     });
   }).then((result) => {
-    console.log(result);
+    console.log(
+      result
+        .map((result, index) => {
+          return { pocket: index + 1, average: result.points / result.ends };
+        })
+        .sort((a, b) =>
+          a.average > b.average ? -1 : a.average < b.average ? 1 : 0
+        )
+    );
   });
 }
 
-init();
+getBestMoves(new Array(12).fill(4));
