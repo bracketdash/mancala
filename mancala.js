@@ -31,14 +31,15 @@ function getBestMoves(pockets) {
     const newPockets = [...pockets];
     newPockets[index] = 0;
     const result = dribble(newPockets, pocket, index + 1, 0);
+    console.log(result);
     points[index] += result.points + (result.freeTurn ? 8 : 0);
     result.pockets.slice(6, 12).forEach((oPocket, oIndex) => {
       const oResult = dribble(result.pockets, oPocket, oIndex, 0);
       oPoints[oIndex] += oResult.points + (oResult.freeTurn ? 8 : 0);
     });
     points[index] -= Math.max(...oPoints);
+    console.log(index, result.pockets.join(","), points[index]);
   });
-  console.log(points);
 }
 
-getBestMoves([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
+getBestMoves([0, 0, 0, 0, 2, 0, 0, 2, 0, 2, 1, 1]);
