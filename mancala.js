@@ -27,24 +27,25 @@ function dribble(pockets, hand, index, points) {
 }
 
 function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
+  tot.al++;
   if (depth === MAX_MOVES) {
-    // TODO: this (choices[choice].ends++) is in the wrong place, or needs to go in additional places
     choices[choice].ends++;
+    console.log(tot.al);
     if (tot.al >= 55986) {
-      resolve(choices);
+      setTimeout(() => {
+        resolve(choices);
+      }, 100);
     }
     return;
   }
-  tot.al++;
   choices.forEach((_, index) => {
     const cf = choice === false ? index : choice;
     if (pockets[index]) {
-      const result = dribble(
-        pockets,
-        pockets[index + (flipped ? 6 : 0)],
-        index + (flipped ? 6 : 0),
-        0
-      );
+      const newPockets = [...pockets];
+      const startingPocket = index + (flipped ? 6 : 0);
+      const hand = newPockets[startingPocket];
+      newPockets[startingPocket] = 0;
+      const result = dribble(newPockets, hand, startingPocket + 1, 0);
       if (!flipped) {
         choices[cf].points += result.points;
       }
@@ -60,8 +61,12 @@ function recurse({ choice, choices, depth, flipped, pockets, resolve, tot }) {
         });
       });
     } else {
-      choices[choice].ends++;
+      choices[cf].ends++;
       tot.al += Math.pow(6, MAX_MOVES - depth);
+      console.log(tot.al);
+      if (tot.al >= 55986) {
+        resolve(choices);
+      }
     }
   });
 }
