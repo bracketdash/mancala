@@ -25,7 +25,7 @@ function dribble(pockets, hand, index, points) {
 }
 
 function getScores(pockets) {
-  const points = [4, 5, 6, 7, 8, 9];
+  const points = [0, 0, 0, 0, 0, 0];
   pockets.slice(0, 6).forEach((pocket, index) => {
     const oPoints = [0, 0, 0, 0, 0, 0];
     const newPockets = [...pockets];
@@ -34,21 +34,24 @@ function getScores(pockets) {
     points[index] += result.points;
     if (result.freeTurn) {
       points[index] += 1 + Math.max(...getScores(result.pockets));
+    } else {
+      result.pockets.slice(6, 12).forEach((oPocket, oIndex) => {
+        const oResult = dribble(result.pockets, oPocket, oIndex, 0);
+        oPoints[oIndex] += oResult.points;
+        if (oResult.freeTurn) {
+          oPoints[oIndex] += 5;
+        }
+      });
+      points[index] -= Math.max(...oPoints);
     }
-    result.pockets.slice(6, 12).forEach((oPocket, oIndex) => {
-      const oResult = dribble(result.pockets, oPocket, oIndex, 0);
-      oPoints[oIndex] += oResult.points;
-      if (oResult.freeTurn) {
-        oPoints[oIndex] += 5;
-      }
-    });
-    points[index] -= Math.max(...oPoints);
   });
   return points;
 }
 
-function init() {
-  const scores = getScores([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4])
+function init(pockets) {
+  const scores = getScores(
+    pockets ? pockets.split(",") : [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  )
     .map((score, index) => {
       return { slot: index + 1, score };
     })
@@ -56,4 +59,4 @@ function init() {
   console.log(scores[0].slot);
 }
 
-init();
+init(process.argv[2]);
