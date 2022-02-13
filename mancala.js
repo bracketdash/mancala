@@ -24,22 +24,24 @@ function dribble(pockets, hand, index, points) {
   return dribble(newPockets, hand - 1, index + 1, points);
 }
 
-function getBestMoves(pockets) {
-  const points = [0, 0, 0, 0, 0, 0];
+function getScores(pockets) {
+  const points = [10, 10, 10, 10, 10, 10];
   pockets.slice(0, 6).forEach((pocket, index) => {
     const oPoints = [0, 0, 0, 0, 0, 0];
     const newPockets = [...pockets];
     newPockets[index] = 0;
     const result = dribble(newPockets, pocket, index + 1, 0);
-    console.log(result);
+    // TODO: make freeTurn worth 1 + the highest points of next round (recursively)
     points[index] += result.points + (result.freeTurn ? 8 : 0);
     result.pockets.slice(6, 12).forEach((oPocket, oIndex) => {
       const oResult = dribble(result.pockets, oPocket, oIndex, 0);
+      // TODO: make freeTurn worth 1 + the highest points of next round (recursively)
       oPoints[oIndex] += oResult.points + (oResult.freeTurn ? 8 : 0);
     });
     points[index] -= Math.max(...oPoints);
+    // TODO: avoid having all empty slots
     console.log(index, result.pockets.join(","), points[index]);
   });
 }
 
-getBestMoves([0, 0, 0, 0, 2, 0, 0, 2, 0, 2, 1, 1]);
+getScores([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
