@@ -31,17 +31,21 @@ function getScores(pockets) {
     const newPockets = [...pockets];
     newPockets[index] = 0;
     const result = dribble(newPockets, pocket, index + 1, 0);
-    // TODO: make freeTurn worth 1 + the highest points of next round (recursively)
-    points[index] += result.points + (result.freeTurn ? 8 : 0);
+    points[index] += result.points;
+    if (result.freeTurn) {
+      points[index] += 1 + Math.max(...getScores(result.pockets));
+    }
     result.pockets.slice(6, 12).forEach((oPocket, oIndex) => {
       const oResult = dribble(result.pockets, oPocket, oIndex, 0);
-      // TODO: make freeTurn worth 1 + the highest points of next round (recursively)
-      oPoints[oIndex] += oResult.points + (oResult.freeTurn ? 8 : 0);
+      oPoints[oIndex] += oResult.points;
+      if (oResult.freeTurn) {
+        oPoints[oIndex] += 1 + Math.max(...getScores(oResult.pockets));
+      }
     });
     points[index] -= Math.max(...oPoints);
     // TODO: avoid having all empty slots
-    console.log(index, result.pockets.join(","), points[index]);
   });
+  return points;
 }
 
-getScores([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
+console.log(getScores([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]));
