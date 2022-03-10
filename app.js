@@ -30,6 +30,7 @@ function displayBoard(state) {
 }
 function updateBoard(player, pocket) {
   // TODO: handle captures
+  // TODO: the skip logic needs tweaking
   const currState = data[data.length - 1];
   const newState = [...currState];
   const chosenIndex = player === 1 ? pocket - 1 : 6 + pocket;
