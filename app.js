@@ -5,6 +5,7 @@ function setLocalData() {
 if (localStorage.getItem("data")) {
   try {
     data = JSON.parse(localStorage.getItem("data"));
+    displayBoard(data[data.length - 1]);
   } catch (e) {
     setLocalData();
   }
@@ -14,7 +15,7 @@ if (localStorage.getItem("data")) {
 function displayBoard(state) {
   state.forEach((value, index) => {
     const player = index < 6 ? 1 : 2;
-    const pocket = index < 6 ? index : index - 6;
+    const pocket = index < 6 ? index + 1 : index - 6;
     if (index === 6) {
       document.getElementById("p1bp-usd").innerHTML = value;
       document.getElementById("p1bp-rsu").innerHTML = value;
@@ -28,6 +29,7 @@ function displayBoard(state) {
   });
 }
 function updateBoard(player, pocket) {
+  // TODO: handle captures
   const currState = data[data.length - 1];
   const newState = [...currState];
   const chosenIndex = player === 1 ? pocket - 1 : 6 + pocket;
@@ -37,7 +39,7 @@ function updateBoard(player, pocket) {
   Array(beads)
     .fill(1)
     .forEach((_, bead) => {
-      const dataIndex = (chosenIndex + bead + skipped) % 14;
+      const dataIndex = (chosenIndex + bead + 1 + skipped) % 14;
       if (
         (player === 1 && dataIndex === 13) ||
         (player === 2 && dataIndex === 6)
@@ -52,7 +54,7 @@ function updateBoard(player, pocket) {
     Array(skipped)
       .fill(1)
       .forEach((_, skip) => {
-        newState[(chosenIndex + skip + ogTotes) % 14]++;
+        newState[(chosenIndex + 1 + skip + ogTotes) % 14]++;
       });
   }
   data.push(newState);
