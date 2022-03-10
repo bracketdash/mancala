@@ -29,35 +29,35 @@ function displayBoard(state) {
   });
 }
 function updateBoard(player, pocket) {
-  // TODO: handle captures
-  // TODO: the skip logic needs tweaking
   const currState = data[data.length - 1];
   const newState = [...currState];
   const chosenIndex = player === 1 ? pocket - 1 : 6 + pocket;
   let beads = currState[chosenIndex];
   newState[chosenIndex] = 0;
-  let skipped = 0;
-  Array(beads)
-    .fill(1)
-    .forEach((_, bead) => {
-      const dataIndex = (chosenIndex + bead + 1 + skipped) % 14;
-      if (
-        (player === 1 && dataIndex === 13) ||
-        (player === 2 && dataIndex === 6)
-      ) {
-        skipped++;
-      } else {
-        newState[dataIndex]++;
-      }
-    });
-  if (skipped) {
-    const ogTotes = currState[chosenIndex];
-    Array(skipped)
-      .fill(1)
-      .forEach((_, skip) => {
-        newState[(chosenIndex + 1 + skip + ogTotes) % 14]++;
-      });
-  }
+  // TODO: handle captures
+  // TODO: fix the below
+  //   let skipped = 0;
+  //   Array(beads)
+  //     .fill(1)
+  //     .forEach((_, bead) => {
+  //       const dataIndex = (chosenIndex + bead + 1 + skipped) % 14;
+  //       if (
+  //         (player === 1 && dataIndex === 13) ||
+  //         (player === 2 && dataIndex === 6)
+  //       ) {
+  //         skipped++;
+  //       } else {
+  //         newState[dataIndex]++;
+  //       }
+  //     });
+  //   if (skipped) {
+  //     const ogTotes = currState[chosenIndex];
+  //     Array(skipped)
+  //       .fill(1)
+  //       .forEach((_, skip) => {
+  //         newState[(chosenIndex + 1 + skip + ogTotes) % 14]++;
+  //       });
+  //   }
   data.push(newState);
   setLocalData();
   displayBoard(newState);
@@ -70,11 +70,9 @@ function updateBoard(player, pocket) {
   });
 });
 document.getElementById("btn-undo").addEventListener("click", () => {
-  if (confirm("Undo last move?")) {
-    data.pop();
-    setLocalData();
-    displayBoard(data[data.length - 1]);
-  }
+  data.pop();
+  setLocalData();
+  displayBoard(data[data.length - 1]);
 });
 document.getElementById("btn-reset").addEventListener("click", () => {
   if (confirm("Reset the board?")) {
