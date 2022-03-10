@@ -55,6 +55,11 @@ body {
   height: 10.94vw;
   line-height: 10.94vw;
 }
+.little-pocket:hover .usd,
+.little-pocket:hover .rsu {
+  background-color: rgba(0 0 0 / 80%);
+  color: #fff;
+}
 .buttons {
   display: flex;
   margin-top: 2vw;
@@ -64,4 +69,8 @@ body {
   cursor: pointer;
   margin: 2rem;
   padding: 0.5rem 1rem;
+}
+.button:hover {
+  background-color: #aaa;
+  color: #fff;
 }
