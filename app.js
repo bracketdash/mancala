@@ -70,6 +70,9 @@ function updateBoard(player, pocket) {
   });
 });
 document.getElementById("btn-undo").addEventListener("click", () => {
+  if (data.length === 1) {
+    return;
+  }
   data.pop();
   setLocalData();
   displayBoard(data[data.length - 1]);
