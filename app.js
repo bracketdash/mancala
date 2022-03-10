@@ -32,9 +32,18 @@ function dribble(player, state, index, beads) {
   if (!beads) {
     return state;
   }
-  if (beads === 1) {
-    // TODO: if last bead would go in an empty pocket on player's side
-    // take that bead and any in the pocket on the opposite side and put it in player's big pockets
+  if (beads === 1 && state[index] === 0) {
+    if (player === 1 && index < 6) {
+      const opposite = 6 - index + 6;
+      state[6] += 1 + state[opposite];
+      state[opposite] = 0;
+      return state;
+    } else if (player === 2 && index > 6) {
+      const opposite = 6 - (index - 6);
+      state[13] += 1 + state[opposite];
+      state[opposite] = 0;
+      return state;
+    }
   }
   if (index === 14) {
     index = 0;
