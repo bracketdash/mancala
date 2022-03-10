@@ -12,7 +12,20 @@ if (localStorage.getItem("data")) {
   setLocalData();
 }
 function displayBoard(state) {
-  // TODO
+  state.forEach((value, index) => {
+    const player = index < 6 ? 1 : 2;
+    const pocket = index < 6 ? index : index - 6;
+    if (index === 6) {
+      document.getElementById("p1bp-usd").innerHTML = value;
+      document.getElementById("p1bp-rsu").innerHTML = value;
+    } else if (index === 13) {
+      document.getElementById("p2bp-usd").innerHTML = value;
+      document.getElementById("p2bp-rsu").innerHTML = value;
+    } else {
+      document.getElementById(`p${player}lp${pocket}-usd`).innerHTML = value;
+      document.getElementById(`p${player}lp${pocket}-rsu`).innerHTML = value;
+    }
+  });
 }
 function updateBoard(player, pocket) {
   const currState = data[data.length - 1];
