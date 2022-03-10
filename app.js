@@ -28,37 +28,30 @@ function displayBoard(state) {
     }
   });
 }
+function dribble(player, state, index, beads) {
+  if (!beads) {
+    return state;
+  }
+  if (beads === 1) {
+    // TODO: if last bead would go in an empty pocket on player's side
+    // take that bead and any in the pocket on the opposite side and put it in player's big pockets
+  }
+  if (index === 14) {
+    index = 0;
+  }
+  if ((player === 1 && index === 13) || (player === 2 && index === 6)) {
+    return dribble(player, state, index + 1, beads);
+  } else {
+    state[index]++;
+    return dribble(player, state, index + 1, beads - 1);
+  }
+}
 function updateBoard(player, pocket) {
   const currState = data[data.length - 1];
-  const newState = [...currState];
   const chosenIndex = player === 1 ? pocket - 1 : 6 + pocket;
-  let beads = currState[chosenIndex];
+  const newState = [...currState];
   newState[chosenIndex] = 0;
-  // TODO: handle captures
-  // TODO: fix the below
-  //   let skipped = 0;
-  //   Array(beads)
-  //     .fill(1)
-  //     .forEach((_, bead) => {
-  //       const dataIndex = (chosenIndex + bead + 1 + skipped) % 14;
-  //       if (
-  //         (player === 1 && dataIndex === 13) ||
-  //         (player === 2 && dataIndex === 6)
-  //       ) {
-  //         skipped++;
-  //       } else {
-  //         newState[dataIndex]++;
-  //       }
-  //     });
-  //   if (skipped) {
-  //     const ogTotes = currState[chosenIndex];
-  //     Array(skipped)
-  //       .fill(1)
-  //       .forEach((_, skip) => {
-  //         newState[(chosenIndex + 1 + skip + ogTotes) % 14]++;
-  //       });
-  //   }
-  data.push(newState);
+  data.push(dribble(player, newState, chosenIndex + 1, currState[chosenIndex]));
   setLocalData();
   displayBoard(newState);
 }
