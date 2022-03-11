@@ -32,21 +32,21 @@ function dribble(player, state, index, beads) {
   if (!beads) {
     return state;
   }
+  if (index === 14) {
+    index = 0;
+  }
   if (beads === 1 && state[index] === 0) {
     if (player === 1 && index < 6) {
       const opposite = 6 - index + 6;
       state[6] += 1 + state[opposite];
       state[opposite] = 0;
       return state;
-    } else if (player === 2 && index > 6) {
+    } else if (player === 2 && index > 6 && index !== 13) {
       const opposite = 6 - (index - 6);
       state[13] += 1 + state[opposite];
       state[opposite] = 0;
       return state;
     }
-  }
-  if (index === 14) {
-    index = 0;
   }
   if ((player === 1 && index === 13) || (player === 2 && index === 6)) {
     return dribble(player, state, index + 1, beads);
