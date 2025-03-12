@@ -1,9 +1,10 @@
 html,
 body {
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
 }
+
 .container {
   align-items: center;
   display: flex;
@@ -12,6 +13,7 @@ body {
   justify-content: center;
   width: 100%;
 }
+
 .board {
   background-color: #feb;
   border-bottom: 2px solid #640;
@@ -21,19 +23,23 @@ body {
   padding-top: 1vw;
   width: 100%;
 }
+
 .big-pocket {
   flex-grow: 1;
   margin: 1vw;
 }
+
 .little-pockets {
   display: grid;
   flex-grow: 6;
   grid-template-columns: repeat(6, 1fr);
 }
+
 .little-pocket {
   cursor: pointer;
   margin: 1vw;
 }
+
 .usd,
 .rsu {
   border-bottom-left-radius: 6vw;
@@ -46,30 +52,36 @@ body {
   margin-top: 0.25vw;
   text-align: center;
 }
+
 .usd {
-  transform: rotate(-180deg);
   background-color: rgba(0 0 0 / 10%);
+  transform: rotate(-180deg);
 }
+
 .big-pocket .usd,
 .big-pocket .rsu {
   height: 10.94vw;
   line-height: 10.94vw;
 }
+
 .little-pocket:hover .usd,
 .little-pocket:hover .rsu {
   background-color: rgba(0 0 0 / 80%);
   color: #fff;
 }
+
 .buttons {
   display: flex;
   margin-top: 2vw;
 }
+
 .button {
   background-color: #ddd;
   cursor: pointer;
   margin: 2rem;
   padding: 0.5rem 1rem;
 }
+
 .button:hover {
   background-color: #aaa;
   color: #fff;

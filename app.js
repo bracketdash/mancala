@@ -1,7 +1,9 @@
 let data = [[4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]];
+
 function setLocalData() {
   localStorage.setItem("data", JSON.stringify(data));
 }
+
 if (localStorage.getItem("data")) {
   try {
     data = JSON.parse(localStorage.getItem("data"));
@@ -12,6 +14,7 @@ if (localStorage.getItem("data")) {
 } else {
   setLocalData();
 }
+
 function displayBoard(state) {
   state.forEach((value, index) => {
     const player = index < 6 ? 1 : 2;
@@ -28,6 +31,7 @@ function displayBoard(state) {
     }
   });
 }
+
 function dribble(player, state, index, beads) {
   if (!beads) {
     return state;
@@ -55,6 +59,7 @@ function dribble(player, state, index, beads) {
     return dribble(player, state, index + 1, beads - 1);
   }
 }
+
 function updateBoard(player, pocket) {
   const currState = data[data.length - 1];
   const chosenIndex = player === 1 ? pocket - 1 : 6 + pocket;
@@ -64,6 +69,7 @@ function updateBoard(player, pocket) {
   setLocalData();
   displayBoard(newState);
 }
+
 [...document.getElementsByClassName("little-pocket")].forEach((el, index) => {
   const player = index < 6 ? 2 : 1;
   const pocket = index < 6 ? 6 - index : index - 5;
@@ -71,6 +77,7 @@ function updateBoard(player, pocket) {
     updateBoard(player, pocket);
   });
 });
+
 document.getElementById("btn-undo").addEventListener("click", () => {
   if (data.length === 1) {
     return;
@@ -79,6 +86,7 @@ document.getElementById("btn-undo").addEventListener("click", () => {
   setLocalData();
   displayBoard(data[data.length - 1]);
 });
+
 document.getElementById("btn-reset").addEventListener("click", () => {
   if (confirm("Reset the board?")) {
     data = [[4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]];
